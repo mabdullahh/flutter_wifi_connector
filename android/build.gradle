@@ -2,22 +2,22 @@ group 'com.wonjerry.wifi_connector'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.8.0'
+    ext.kotlin_version = '1.8.10' // Updated Kotlin version to match project configuration
     repositories {
-        google()
-        jcenter()
+        google()  // Google repository for Android dependencies
+        mavenCentral() // Maven Central as jcenter() is deprecated
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.3'
+        classpath 'com.android.tools.build:gradle:8.1.0' // Use AGP compatible with Gradle 8.1
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 rootProject.allprojects {
     repositories {
-        google()
-        jcenter()
+        google()  // Google repository
+        mavenCentral() // Maven Central repository
     }
 }
 
@@ -25,22 +25,35 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace 'com.wonjerry.wifi_connector'
-    compileSdkVersion 28
+    namespace 'com.wonjerry.wifi_connector' // Required namespace for Android libraries
+    compileSdkVersion 34 // Updated to the latest compile SDK version
+
+    defaultConfig {
+        minSdkVersion 24 // Minimum supported SDK version
+        targetSdkVersion 34 // Target SDK version aligned with compile SDK
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        namespace 'com.wonjerry.wifi_connector' // Required namespace for Android libraries
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17 // Align with JVM version
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17" // Set Kotlin JVM target compatibility to match Java version
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
-    defaultConfig {
-        minSdkVersion 24
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
+
     lintOptions {
-        disable 'InvalidPackage'
+        disable 'InvalidPackage' // Suppress invalid package warnings
     }
 }
 
 dependencies {
-    implementation 'android.arch.lifecycle:common-java8:1.1.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.6.2' // Latest stable version of Lifecycle library
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version" // Updated to jdk8 for better compatibility
 }
